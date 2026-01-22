@@ -1,0 +1,76 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:collections="using:System.Collections"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:UnivariateLinearRegression.ViewModels"
+             xmlns:controls="using:UnivariateLinearRegression.Controls"
+             
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="UnivariateLinearRegression.Views.MainView"
+             x:DataType="vm:LinearRegressionViewModel"
+             
+             >
+  <Design.DataContext>
+    <!-- This only sets the DataContext for the previewer in an IDE,
+         to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+    <vm:LinearRegressionViewModel />
+  </Design.DataContext>
+ <Grid>
+     <Grid.RowDefinitions>
+         <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+         <RowDefinition Height="Auto"/>
+         <RowDefinition Height="Auto"/>
+         <RowDefinition Height="*"/>         
+     </Grid.RowDefinitions>
+     <Grid.ColumnDefinitions>
+         <ColumnDefinition Width="*"/>
+         
+    </Grid.ColumnDefinitions>   
+    <TextBlock Grid.Row="0" Grid.Column="0" Text="The Gradient descent" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="8"/>
+     <StackPanel Grid.Row="1" Grid.Column="0" >
+         <StackPanel Orientation="Horizontal" Margin="2,2,2,2">
+             <TextBlock VerticalAlignment="Center">XMax:</TextBlock>
+	         <TextBox   Text="{Binding XMax, UpdateSourceTrigger=LostFocus}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+         </StackPanel>         
+          <StackPanel Orientation="Horizontal" Margin="2,2,2,2">
+             <TextBlock VerticalAlignment="Center">YMax:</TextBlock>
+              <TextBox   Text="{Binding YMax, UpdateSourceTrigger=LostFocus}" HorizontalAlignment="Center" VerticalAlignment="Center" />                 
+           </StackPanel>
+      
+     </StackPanel>
+   <StackPanel Grid.Row="2" Margin="2,6,2,2">
+             <TextBlock Text="Equation (ex: y = 2x + 1)"  Margin="2,2,2,2"/>
+             <TextBox Text="{Binding Equation, Mode=TwoWay,UpdateSourceTrigger=LostFocus}" Margin="2,2,2,2" />
+             <StackPanel Orientation="Horizontal" >
+                  <TextBlock  VerticalAlignment="Center" Text="Example count:"  Margin="2,2,2,2"/>
+			      <TextBox Text="{Binding ExampleCount, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" Margin="2,2,2,2" />	 
+                  <TextBlock Text="ErrorRange (+/-):"  Margin="2,2,2,2"  VerticalAlignment="Center" />
+			      <TextBox Text="{Binding ErrorRange, Mode=TwoWay,UpdateSourceTrigger=LostFocus}"  Margin="2,2,2,2"/>	 
+             </StackPanel>
+             
+             <StackPanel Orientation="Horizontal" Margin="0,4,0,0" HorizontalAlignment="Center" >
+                 <Button Content="Generate data" Command="{Binding GenerateData}" IsEnabled="{Binding !IsTraining}" Margin="0,0,8,0"/>
+                 <TextBlock Text="{Binding ParseError}" Foreground="Red" VerticalAlignment="Center"/>
+             </StackPanel>        
+          <StackPanel Orientation="Horizontal" Margin="0,4,0,0" HorizontalAlignment="Center" IsEnabled="{Binding CanTrain}" >
+               
+                  <CheckBox Content="Step by step" IsChecked="{Binding StepByStep}" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                 <Button Content="Start Gradient Descent" IsEnabled="{Binding !IsTraining}" Command="{Binding StartGradientDescent}" Margin="0,0,8,0"/>                 
+                 <Button Content="Stop" IsEnabled="{Binding IsTraining}" Command="{Binding StopGradientDescent}" Margin="0,0,8,0"/>                 
+             
+             </StackPanel>                                                    
+         </StackPanel>
+      <StackPanel Grid.Row="3" Orientation="Horizontal">
+        <TextBlock  VerticalAlignment="Center">Iteration: </TextBlock>
+        <TextBlock  VerticalAlignment="Center"  Text="{Binding Iteration}"></TextBlock>
+      </StackPanel>
+  <Border Grid.Row="4" BorderBrush="Black" BorderThickness="1" Background="White" Padding="8" Margin="8">
+      <controls:AxesControl  XMax="{Binding XMax}" YMax="{Binding YMax}" Points="{Binding DataPoints}" 
+                              LinearParameter_a="{Binding A}" LinearParameter_b="{Binding B}"
+                              LinearParameter_aModel="{Binding AOfModel}" LinearParameter_bModel="{Binding BOfModel}"
+                             />
+   </Border>
+ </Grid>
+</UserControl>

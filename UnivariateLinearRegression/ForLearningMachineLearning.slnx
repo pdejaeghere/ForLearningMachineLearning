@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="Directory.Packages.props" />
+    <File Path="global.json" />
+  </Folder>
+  <Project Path="UnivariateLinearRegression.Browser/UnivariateLinearRegression.Browser.csproj" />
+  <Project Path="UnivariateLinearRegression.Desktop/UnivariateLinearRegression.Desktop.csproj" />
+  <Project Path="UnivariateLinearRegression/UnivariateLinearRegression.csproj" />
+</Solution>
