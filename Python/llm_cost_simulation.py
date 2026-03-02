@@ -44,8 +44,10 @@ def simulate_chat_cost(
     Chaque message 'user' déclenche une nouvelle requête.
     """
 
+    
     history = []
-    total_input_tokens = 0
+    total_input_tokens=0;
+    total_input_tokens_cumulated = 0
     total_output_tokens = 0
     total_cost = 0.0
     total_pingpong = 0
@@ -62,7 +64,9 @@ def simulate_chat_cost(
             input_text = json.dumps(history, separators=(',', ':'))
             input_tokens = count_tokens_openai(model_name, input_text)
             total_pingpong += 1
-            total_input_tokens += input_tokens
+            
+            total_input_tokens += count_tokens_openai(model_name, json.dumps(msg["Items"], separators=(',', ':'))  )
+            total_input_tokens_cumulated += input_tokens
 
         # Si message assistant → réponse générée
         if role == "assistant":
@@ -73,14 +77,15 @@ def simulate_chat_cost(
             total_output_tokens += output_tokens
 
     total_cost = (
-        (total_input_tokens / 1_000_000) * input_price_per_million +
+        (total_input_tokens_cumulated / 1_000_000) * input_price_per_million +
         (total_output_tokens / 1_000_000) * output_price_per_million
     )
 
     return {
         "total_input_tokens": total_input_tokens,
+        "total_input_tokens_cumulated": total_input_tokens_cumulated,
         "total_output_tokens": total_output_tokens,
-        "total_tokens": total_input_tokens + total_output_tokens,
+        "total_tokens": total_input_tokens_cumulated + total_output_tokens,
         "total_pingpong":total_pingpong,
         "estimated_cost": round(total_cost, 6)
     }
